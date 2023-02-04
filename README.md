@@ -19,6 +19,15 @@ The entire api functionality is exposed via the `main.rs` file.
     cargo test
 
 
+## Get Dao Proposal by Id:
+
+```rust
+    let url_val = NCInitUrlsDev::default().nodeos_url.clone();
+    let gtr_response: Response = get_table_rows().await;
+    let data = gtr_response.json().await?;
+
+```
+
 
 //** As of yet, the text below has not been reworked for the application.** //
 # REST API
