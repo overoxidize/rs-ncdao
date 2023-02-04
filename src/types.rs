@@ -267,12 +267,12 @@ pub struct TransactResult {
     processed: TransactionTrace,
 }
 
-pub struct GetTableRowsPayload<'a> {
+pub struct GetTableRowsPayload {
     pub json: bool,
-    pub code: &'a String,
-    pub scope: &'a String,
+    pub code: String,
+    pub scope: String,
     pub table: String,
-    pub table_key: Option<String>,
+    pub table_key: String,
     pub lower_bound: String,
     pub upper_bound: String,
     pub key_type: String,
@@ -283,17 +283,17 @@ pub struct GetTableRowsPayload<'a> {
     pub show_payer: bool,
 }
 #[derive(Clone)]
-pub struct ProposalPayload<'a> {
-    pub id: &'a String,
-    pub contract: &'a String,
+pub struct ProposalPayload {
+    pub id: String,
+    pub contract: String,
 }
 
 pub struct RewardPayload {
     category: String,
 }
 
-pub struct SlicePayload<'a> {
-    pub date: &'a String,
+pub struct SlicePayload {
+    pub date: String,
 }
 
 pub struct TopPoolPayload {
