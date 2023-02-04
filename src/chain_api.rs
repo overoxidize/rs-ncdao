@@ -61,15 +61,17 @@ pub async fn get_table_rows_with_payload(payload: GetTableRowsPayload) -> Respon
     return resp.unwrap();
 }
 
-// pub async fn get_table_rows() -> Response {
+pub async fn get_table_rows() -> Response {
+    let init_url = NCInitUrlsDev::default().nodeos_url.clone();
 
-    // let url_val: String = String::from(DEV_NODEOS_URL.clone() + "/v1/chain/get_table_rows");
 
-    // let resp = get(String::from(url_val)).await;
+    let url_val: String = String::from(init_url.clone() + "/v1/chain/get_table_rows");
 
-    // let value = resp.unwrap();
-    // value
-// }
+    let resp = get(String::from(url_val)).await;
+
+    let value = resp.unwrap();
+    value
+}
 
 pub async fn get_proposal_by_id(opts: ProposalPayload) -> Response {
     let proposal_payload = ProposalPayload {
