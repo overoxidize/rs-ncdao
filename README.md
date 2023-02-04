@@ -44,8 +44,16 @@ The REST API to the example app is described below.
 
     []
 
-## Create a new Thing
 
+
+## Get Dao Proposal by Id:
+
+```rust
+    let url_val = NCInitUrlsDev::default().nodeos_url.clone();
+    let gtr_response: Response = get_table_rows().await;
+    let data = gtr_response.json().await?;
+
+```
 ### Request
 
 `POST /thing/`

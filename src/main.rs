@@ -39,8 +39,8 @@ async fn main() -> Result<(), Error> {
 
     let url_val = NCInitUrlsDev::default().nodeos_url.clone();
     let gtr_response: Response = get_table_rows().await;
-    // let gtr_wp: Response = get_table_rows_with_payload(payload).await;
     let data = gtr_response.json().await?;
+    // let gtr_wp: Response = get_table_rows_with_payload(payload).await;
 
 
     println!("{:?}", data);
