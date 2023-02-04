@@ -1,6 +1,5 @@
 extern crate reqwest;
 extern crate serde;
-// use crate::io_sys::DEV_NODEOS_URL;
 use crate::types::{
     GetTableRowsPayload, ProposalPayload, SlicePayload, TopPoolPayload, TransactResult,
     VotePayload, WhiteListPayload,
@@ -32,7 +31,6 @@ pub struct ChainApi {
     pub fetch: Option<AnyType>,
 }
 
-// let url_val: String = String::from(DEV_NODEOS_URL.into() + "/v1/chain/get_table_rows");
 
 pub async fn get_table_rows_with_payload(payload: GetTableRowsPayload) -> Response {
     let init_url = NCInitUrlsDev::default().nodeos_url.clone();
@@ -167,66 +165,7 @@ impl ChainApi {
         }
     }
 
-    // pub async fn get_table_rows_with_payload(&self, payload: GetTableRowsPayload) -> Response {
-    //     let resp: Result<Response, reqwest::Error> = reqwest::get( String::from(&self.nodeos_url) + "/v1/chain/get_table_rows")
-    //         .await;
 
-    //         return resp.unwrap();
-
-    // }
-
-    // pub async fn get_table_rows(&self) -> Response {
-    //     let resp = get(String::from(&self.nodeos_url) + "/v1/chain/get_table_rows")
-    //         .await;
-
-    //         let value = resp.unwrap();
-    //         value
-    // }
-
-    // pub async fn get_proposal_by_id(self, opts: ProposalPayload<'_>) -> Response {
-    //     let payload = GetTableRowsPayload {
-    //         json: true,
-    //         code: &self.contract,
-    //         scope: &self.contract,
-    //         table: "proposals".into(),
-    //         table_key: Some(opts.id.to_string()),
-    //         lower_bound: opts.id.into(),
-    //         upper_bound: opts.id.into(),
-    //         key_type: "i64".into(),
-    //         index_position: "1".into(),
-    //         encode_type: "".into(),
-    //         limit: 0,
-    //         reverse: false,
-    //         show_payer: false
-    //     };
-    //     let resp = self.get_table_rows_with_payload(payload).await;
-
-    //     resp
-
-    // }
-
-    //   async fn get_proposal_by_contract(self, opts: ProposalPayload<'_>) -> Result<Response, Error> {
-    //     let payload = GetTableRowsPayload {
-    //         json: true,
-    //         code: &self.contract,
-    //         scope: &self.contract,
-    //         table: "proposals".into(),
-    //         table_key: Some(opts.contract.into()),
-    //         lower_bound: opts.contract.into(),
-    //         upper_bound: opts.contract.into(),
-    //         key_type: "name".into(),
-    //         index_position: "2".into(),
-    //         encode_type: "".into(),
-    //         limit: 0,
-    //         reverse: false,
-    //         show_payer: false
-
-    //     };
-
-    //     let resp = self.get_table_rows_with_payload(payload).await;
-
-    //     Ok(resp)
-    //   }
 
     //   pub async fn get_slice(self, opts: SlicePayload<'_>) -> Response {
 
