@@ -667,6 +667,7 @@ version = "0.1.0"
 dependencies = [
  "eosio",
  "futures",
+ "once_cell",
  "reqwest",
  "serde",
  "tokio",

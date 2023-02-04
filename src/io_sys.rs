@@ -1,17 +1,54 @@
-
 pub struct NCInit {
     services: NCInitServices,
-    urls: NCInitUrls,
+    urls: NCInitUrlsDev,
     is_proxy: bool,
     debug: bool
   }
 
-pub struct NCInitUrls {
-    nodeos_url: String,
-    hyperion_url: String,
-    atomicassets_url: String,
-    nodeos_proxy_url: String
+impl Default for NCInit {
+  fn default() -> Self {
+    let service_val = NCInitServices::default();
+    let url_vals = NCInitUrlsDev::default();
+    
+    NCInit { services: service_val, urls: url_vals, is_proxy: false, debug: true }
   }
+}
+
+pub struct NCInitUrlsDev {
+    pub nodeos_url: String,
+    pub hyperion_url: String,
+    pub atomicassets_url: String,
+    pub nodeos_proxy_url: String
+  }
+pub struct NCInitUrlsProd {
+    pub nodeos_url: String,
+    pub hyperion_url: String,
+    pub atomicassets_url: String,
+    pub nodeos_proxy_url: String
+  }
+
+impl Default for NCInitUrlsDev {
+  fn default() -> Self {
+    Self {
+      nodeos_url: String::from("https://nodeos-dev.newcoin.org"),
+      hyperion_url: String::from("https://hyperion-dev.newcoin.org"),
+      atomicassets_url: String::from("https://atomic-nefty-devnet.newcoin.org/"),
+      nodeos_proxy_url: String::from("https://auth-eu-dev.newsafe.org/v1/tx/newcoin")
+    }
+  }
+}
+
+impl Default for NCInitUrlsProd {
+  fn default() -> Self {
+    Self {
+      nodeos_url: String::from("https://nodeos-dev.newcoin.org"),
+      hyperion_url: String::from("https://hyperion-dev.newcoin.org"),
+      atomicassets_url: String::from("https://atomic-nefty-devnet.newcoin.org/"),
+      nodeos_proxy_url: String::from("https://api.newsafe.org/v1/tx/newcoin")
+    }
+  }
+}
+  
   
 pub struct NCInitServices {
     eosio_contract: String,
@@ -24,25 +61,17 @@ pub struct NCInitServices {
   }
 
 
-pub static DEV_NODEOS_URL: &str = "https://nodeos-dev.newcoin.org";
-pub static DEV_HYPERION_URL: &str = "https://hyperion-dev.newcoin.org";
-pub static DEV_ATOMICASSETS_URL: &str = "https://atomic-nefty-devnet.newcoin.org/";
-pub static DEV_NODEOS_PROXY_URL: &str = "https://auth-eu-dev.newsafe.org/v1/tx/newcoin";
-  
-pub static P_DEV_NODEOS_URL: &str = "https://nodeos-dev.newcoin.org";
-pub static P_DEV_HYPERION_URL: &str = "https://hyperion-dev.newcoin.org";
-pub static P_DEV_ATOMIC_NEFTY_URL: &str = "https://hyperion-dev.newcoin.org";
-pub static P_DEV_NEWSAFE_URL: &str = "https://api.newsafe.org/v1/tx/newcoin";
+impl Default for NCInitServices {
+  fn default() -> Self {
+    Self {
+      eosio_contract: String::from("eosio"),
+      token_contract: String::from("eosio.token"),
+      maindao_contract: String::from("pool.nco"),
+      staking_contract: String::from("pools2.nco"),
+      daos_contract: String::from("daos2.nco"),
+      neftymarket_contract: String::from("market.nefty"),
+      atomicassets_contract:  String::from("atomicassets")
+    }
+  }
+}
 
-  
-//   export const devnet_services: NCInitServices =
-//   {
-//     eosio_contract: "eosio",
-//     token_contract: "eosio.token",
-//     maindao_contract: "pool.nco",
-//     staking_contract: "pools2.nco",
-//     daos_contract: "daos2.nco",
-//     neftymarket_contract: "market.nefty",
-//     atomicassets_contract: "atomicassets"
-//   };
-  

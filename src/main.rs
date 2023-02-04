@@ -13,11 +13,7 @@ use reqwest::Response;
 
 use chain_api::{ChainApi, AnyType};
 use futures::Future;
-use io_sys::{
-    DEV_NODEOS_URL,
-    DEV_NODEOS_PROXY_URL,
-    DEV_ATOMICASSETS_URL, 
-    DEV_HYPERION_URL};
+use io_sys::{NCInit, NCInitServices, NCInitUrlsDev};
 use types::GetTableRowsPayload;
 
 use reqwest::Error;
@@ -25,12 +21,12 @@ use reqwest::Error;
 #[tokio::main]
 async fn main() -> Result<(), Error> {
     
-    let response: Response = reqwest::get(DEV_NODEOS_URL.to_string() + "/v1/chain/get_table_rows".into()).await?;
+    // let response: Response = reqwest::get(DEV_NODEOS_URL.to_string() + "/v1/chain/get_table_rows".into()).await?;
 
-    let data = response.json().await?;
+    // let data = response.json().await?;
 
 
-    println!("{:?}", data);
+    // println!("{:?}", data);
 
     Ok(())
 }

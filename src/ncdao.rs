@@ -1,4 +1,4 @@
-use crate::io_sys::{NCInit, NCInitServices, NCInitUrls};
+use crate::io_sys::{NCInit, NCInitServices, NCInitUrlsDev};
 use crate::types::{ NCCreateDao, NCGetDaoWhiteList, 
     NCCreateDaoProposal, NCCreateDaoUserWhitelistProposal, NCCreateDaoStakeProposal,
     NCApproveDaoProposal, NCExecuteDaoProposal, NCGetVotes, ActionGenerator,
@@ -12,7 +12,7 @@ use crate::chain_api::{ChainApi};
 struct NCDaosAPI {
     debug: bool,
     services: NCInitServices,
-    urls: NCInitUrls,
+    urls: NCInitUrlsDev,
     chain_api: ChainApi,
     dao_ag: ActionGenerator,
     // submitter: NCSubmitApi

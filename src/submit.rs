@@ -1,4 +1,4 @@
-use crate::io_sys::{NCInit, NCInitServices, NCInitUrls};
+use crate::io_sys::{NCInit, NCInitServices, NCInitUrlsDev};
 use crate::types::{ActionGenerator, AnyType};
 use crate::chain_api::ChainApi;
 struct AuthorityProviderArgs {
