@@ -14,6 +14,8 @@ impl Default for NCInit {
   }
 }
 
+#[derive(Clone)]
+
 pub struct NCInitUrlsDev {
     pub nodeos_url: String,
     pub hyperion_url: String,

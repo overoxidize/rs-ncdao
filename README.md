@@ -5,13 +5,6 @@ API functionality for interacting with the Newcoin network.
 
 The entire api functionality is exposed via the `main.rs` file.
 
-`config.ru` is a minimal Rack configuration for unicorn.
-
-`run-tests.sh` runs a simplistic test and generates the API
-documentation below.
-
-It uses `run-curl-tests.rb` which runs each command defined in
-`commands.yml`.
 
 ## Install
 
