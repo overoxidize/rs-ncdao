@@ -6,7 +6,8 @@ API functionality for interacting with the Newcoin network.
 The entire api functionality is exposed via the `main.rs` file.
 
 
-## Install
+//** This command will not yet work as rs_ncdao has not *yet* been uploaded to crates.io **//
+## Install 
 
     cargo install rs_ncdao
 
