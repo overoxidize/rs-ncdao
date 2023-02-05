@@ -31,6 +31,10 @@ pub struct ChainApi {
     pub fetch: Option<AnyType>,
 }
 
+// TODO: Uses of .clone() and .into() are anti-patterns, and eventually, an Rc or Arc will be
+// needed to provide trackable shared ownership of a piece of data.
+// https://rust-unofficial.github.io/patterns/anti_patterns/borrow_clone.html
+
 
 pub async fn get_table_rows_with_payload(payload: GetTableRowsPayload) -> Response {
     let init_url = NCInitUrlsDev::default().nodeos_url.clone();
