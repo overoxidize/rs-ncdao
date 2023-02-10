@@ -3,38 +3,34 @@ pub struct JsonRpc {
     pub endpoint: String
 }
 
-
 pub struct BinaryAbi {
     account_name: String,
     abi: Vec<u8>,
 
 }
 
-
-pub fn create_base_64_map(s: String) -> Vec<u8> {
+pub fn create_base_64_map(s: String) -> Result<Vec<i8>, ()> {
 
     let base_64_bytes =  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".as_bytes();
     
     let bytes_len = base_64_bytes.len();
     let mut ctr = 0;
-    
+    let mut base_64_map: Vec::<i8> = vec![-1; 256];
     while ctr < bytes_len {
         
-        let mut base_64_map: Vec<i8> = vec![-1; 256];
         for i in 0..257 {
             base_64_map[ctr] = base_64_bytes[ctr] as i8;
 
             ctr += 1;
         }
-    
     }
+    return Ok(base_64_map);
 
-    return [1u8].to_vec()
+
 }
 
 
 impl JsonRpc {
-// AuthorityProvider & AbiProvider logic will live here.
 
     pub fn get_required_keys(args: AuthorityProviderArgs) -> Option<Vec<String>> {
         unimplemented!()
