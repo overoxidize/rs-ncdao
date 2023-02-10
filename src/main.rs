@@ -6,9 +6,9 @@ mod types;
 mod ncdao;
 mod chain_api;
 mod submit;
+mod rpc;
 use reqwest::Response;
 
-// TODO: use static variables to instantiate NCInit structs.
 // TODO: pull in types from eos rust libraries
 
 use chain_api::{ChainApi, AnyType, get_table_rows, get_table_rows_with_payload};

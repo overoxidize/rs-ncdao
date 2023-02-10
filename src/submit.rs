@@ -1,7 +1,7 @@
 use crate::io_sys::{NCInit, NCInitServices, NCInitUrlsDev};
 use crate::types::{ActionGenerator, AnyType};
 use crate::chain_api::ChainApi;
-struct AuthorityProviderArgs {
+pub struct AuthorityProviderArgs {
     transaction: AnyType,
     available_keys: Vec<String>
 }
