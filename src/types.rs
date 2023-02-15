@@ -1,6 +1,8 @@
 #[allow(dead_code)]
-use crate::eos_api::api_types::{TransactResult};
+use crate::eos_api::api_types::TransactResult;
+use eosio::ProducerAuthority;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 pub struct NCCreateDao {
     author: String,
@@ -41,6 +43,32 @@ pub struct NCGetDaoWhiteList {
     upper_bound: String,
     limit: String,
     reverse: bool,
+}
+
+struct NCGetAccInfo {
+    owner: String,
+    contract: String,
+    token_name: String,
+}
+struct NCMintAsset {
+    creator: String,
+    col_name: String,
+    sch_name: String,
+    tmpl_id: u32,
+    immutable_data: Vec<HashMap<String, ()>>,
+    mutable_data: Vec<HashMap<String, ()>>,
+    payer: String,
+    payer_prv_key: String,
+}
+
+struct NCKeyValPair {
+    key: String,
+    value: Vec<String>,
+}
+
+struct NCGetPoolInfo {
+    owner: String,
+    code: String,
 }
 
 struct NCStakeProposalQuantity {
@@ -122,6 +150,11 @@ struct TxIdCreateDaoProposal {
     pool_id: String,
 }
 
+struct TxIdStakePool {
+    pool_code: String,
+    pool_id: String,
+}
+
 pub struct NCReturnTxs {
     tx_id_create_acc: String,
     tx_id_create_col: String,
@@ -181,7 +214,6 @@ struct ActionReceipt {
     abi_sequence: u32,
 }
 
-
 pub struct GetTableRowsPayload {
     pub json: bool,
     pub code: String,
@@ -232,125 +264,230 @@ pub struct ActionGenerator {
 pub struct DAOPayload {
     id: String,
     owner: String,
-    description_sha_256: String
+    description_sha_256: String,
+}
+struct NCReturnInfo {
+    acc_balances: Vec<String>,
 }
 
+struct Header(i32, String);
+struct ProducerScheduleType {
+    version: i32,
+    producers: Vec<ProducerAuthority>,
+}
+struct BlockHeader {
+    timestamp: String,
+    producer: String,
+    confirmed: i32,
+    previous: String,
+    tx_mroot: String,
+    action_mroot: String,
+    schedule_version: i32,
+    new_producers: Option<ProducerScheduleType>,
+    header_extensions: Vec<Header>,
+}
 
-// struct AbiType {
-//     new_type_name: String,
-//     new_type: String
-// }
+struct NCKeyPair {
+    pub_key: String,
+    prv_key: String,
+}
 
-// struct  AbiStruct {
-//     name: String,
-//     struct_name: String,
-//     base: String,
-//     fields: Vec<AbiStructFields>
-// }
+struct NCNameType {
+    name: String,
+    r#type: String,
+}
 
-// struct AbiStructFields {
-//     name: String,
-//     field_type: String,
-// }
+struct NCBuyRam {
+    user: String,
+    payer: String,
+    payer_prv_key: String,
+    ram_amt: u32,
+}
 
-// struct AbiActions {
-//     name: String,
-//     abi_action_type: String,
-//     ricardian_contract: String,
-// }
+struct NCCreateUser {
+    new_user: String,
+    newacc_pub_active_key: String,
+    newacc_pub_owner_key: String,
+    payer: String,
+    payer_prv_key: String,
+    ram_amt: u32,
+    cpu_amount: String,
+    net_amount: String,
+    xfer: bool, // stake or transfer CPU/NET to the account
+}
 
-// struct AbiTable {
-//     table_name: String,
-//     table_type: String,
-//     index_type: String,
-//     key_names: Vec<String>,
-//     key_types: Vec<String>
-// }
+struct NCCreateCollection {
+    user: String,
+    user_prv_active_key: String,
+    collection_name: String,
+    schema_name: String,
+    schema_fields: Vec<String>,
+    template_name: String,
+    template_fields: Vec<String>,
+    mkt_fee: u32,
+    allow_notify: bool,
+    xferable: bool,
+    burnable: bool,
+    max_supply: u32,
+}
 
-// struct RicardianClauses {
-//     clause_id: String,
-//     body: String,
-// }
+struct NCCreatePermission {
+    author: String,
+    perm_name: String,
+    perm_pub_key: String,
+    author_prv_active_key: String,
+}
 
-// struct ErrorMessages {
-//     error_code: i32,
-//     error_msg: String,
-// }
+struct NCLinkPerm {
+    author: String, // the owner of the permission
+    perm_to_link: String,
+    action_owner: String,
+    action_to_link: String,
+    author_prv_active_key: String,
+}
 
-// struct AbiExtension {
-//     tag: i32,
-//     value: String,
-// }
+struct NCCreatePool {
+    owner: String,
+    owner_prv_active_key: String,
+    ticker: String,
+    is_inflatable: bool,
+    is_deflatable: bool,
+    is_treasury: bool,
+}
 
-// struct AbiVariantData {
-//     variant_name: String,
-//     variant_types: Vec<String>,
-// }
-// enum AbiVariant {
-//     Some(Vec<AbiVariantData>),
-//     None
-// }
+struct NCStakeMainDao {
+    amt: String,
+    payer: String,
+    payer_prv_key: String,
+}
 
-// struct ActionResultData {
-//     result_name: String,
-//     result_type: String,
-// }
+struct NCStakePool {
+    owner: String,
+    amt: String,
+    payer: String,
+    payer_prv_key: String,
+}
 
-// enum ActionResult {
-//     Some(Vec<ActionResultData>),
-//     None
-// }
-// struct KvSecondaryIndices {
-//     index_type: String
-// }
-// struct KvPrimaryIndex {
-//     name: String,
-//     pi_type: String,
-// }
-// struct KvTableData {
-//     kvt_type: String,
-//     primary_index: KvPrimaryIndex,
-//     secondary_indices: Vec<KvSecondaryIndices>
+struct NCUnstakePool {
+    amt: String,
+    payer: String,
+    payer_prv_key: String,
+}
 
-// }
+struct NCTxNcoBal {
+    to: String,
+    amt: String,
+    payer: String,
+    memo: String,
+    payer_prv_key: String,
+}
 
-// enum KvTable {
-//     Some(Vec<KvTableData>)
-// }
-// struct ABI {
-//     version: String,
-//     types: Vec<AbiType>,
-//     structs: Vec<AbiStruct>,
-//     actions: Vec<AbiActions>,
-//     tables: Vec<AbiTable>,
-//     ricardian_clauses: Vec<RicardianClauses>,
-//     error_messages: Vec<ErrorMessages>,
-//     abi_extensions: Vec<AbiExtension>,
-//     variants: Option<AbiVariant>,
-//     action_results: Option<ActionResult>,
-//     kv_tables: Option<KvTable>
+struct NCTxBal {
+    to: String,
+    amt: String,
+    payer: String,
+    memo: String,
+    payer_prv_key: String,
+}
 
+struct NCPoolInfoTotal {
+    quantity: String,
+    contract: String,
+}
+struct NCPoolInfo {
+    id: String,
+    code: String,
+    owner: String,
+    description: String,
+    total: NCPoolInfoTotal,
+    creation_date: String,
+    last_update_date: String,
+}
 
-// }
+struct NCPoolsInfo {
+    rows: Vec<String>,
+    more: bool,
+    next_key: String,
+}
 
-// struct Header(i32, String);
-// struct ProducerScheduleType {
-//     version: i32,
-//     producers: Vec<ProducerAuthority>
-// }
-// struct BlockHeader {
-//     timestamp: String,
-//     producer: String,
-//     confirmed: i32,
-//     previous: String,
-//     tx_mroot: String,
-//     action_mroot: String,
-//     schedule_version: i32,
-//     new_producers: Option<ProducerScheduleType>,
-//     header_extensions: Vec<Header>
-// }
+pub struct NCModifyAsset {
+    editor: String,
+    owner: String,
+    asset_id: String,
+    new_data: Vec<NCKeyPair>,
+    payer: String,
+    payer_prv_key: String,
+}
 
-// struct Authorization {
-//     actor: String,
-//     permission: String,
-// }
+pub struct NCMintNftToRoot {
+    creator: String,
+    immutable_data: Vec<NCKeyPair>,
+    mutable_data: Vec<NCKeyPair>,
+    payer: String,
+    payer_prv_key: String,
+}
+
+pub struct NCBindCollection {
+    creator: String,
+    col_name: String,
+    description: String,
+    image: String,
+    payer: String,
+    payer_prv_key: String,
+}
+
+pub struct NCMintProfile {
+    status: String,
+    offer: String,
+
+    display_namee: String,
+    source: String, // one of the socials
+    authority: String,
+    signature: String,
+
+    content: String,
+    bio: String,
+    full_name: String,
+    first_name: String,
+    last_name: String,
+    username: String,
+    email: String,
+    phone: String,
+
+    content_type: String,
+    content_url: String,
+    cover_content_url: String,
+    blur_hash: String,
+    aspect_ratio: String,
+    creator: String,
+
+    instagram: String,
+    tiktok: String,
+    youtube: String,
+    twitter: String,
+    spotify: String,
+    pinterest: String,
+    snapchat: String,
+    reddit: String,
+    discord: String,
+    tumblr: String,
+    soundcloud: String,
+    apple: String,
+    telegram: String,
+    signal: String,
+    medium: String,
+    facebook: String,
+    facebook_id: String,
+    youtube_id: String,
+    payer: String,
+
+    payer_prv_key: String,
+    user_prv_active_key: String,
+}
+
+pub struct NCSwapNCOtoCC {
+    amt: String,
+    payer: String,
+    payer_prv_key: String,
+    creator_to: String,
+}

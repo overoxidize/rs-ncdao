@@ -1,5 +1,5 @@
-use serde::{Serialize, Deserialize};
-use crate::json_rpc::rpc_types::{JsonRpc, Abi};
+use crate::json_rpc::rpc_types::{Abi, JsonRpc};
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 #[derive(Serialize, Deserialize)]
@@ -12,18 +12,15 @@ pub struct Api {
 
     // pub text_encoder: TextEncoder
     // pub text_decoder: TextDecoder
-        //* The functionality of these objects may end up being supplied by flate2 */
-    
+    //* The functionality of these objects may end up being supplied by flate2 */
     pub abi_types: HashMap<String, ()>,
 
     pub transaction_types: HashMap<String, ()>,
 
     pub contracts: HashMap<String, ()>, //
 
-    pub cached_abis: HashMap<String, CachedAbi>
-    
+    pub cached_abis: HashMap<String, CachedAbi>,
 }
-
 
 #[derive(Default, Debug, Serialize, Deserialize, Clone)]
 pub struct Authorization {
@@ -58,7 +55,6 @@ pub struct AccountDelta {
     account: String,
     delta: u32,
 }
-
 
 #[derive(Default, Debug, Serialize, Deserialize, Clone)]
 pub struct ActionTrace {
@@ -115,32 +111,38 @@ pub struct TransactResult {
 }
 
 pub struct BinaryAbi {
-    //** The account deeploying the abi */ 
+    //** The account deeploying the abi */
     account_name: String,
-    //** The abi in raw (binary) form */ 
+    //** The abi in raw (binary) form */
     abi: Vec<u8>,
-    
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct CachedAbi {
     raw_abi: Vec<u8>,
-    abi: Abi
+    abi: Abi,
 }
 #[derive(Serialize, Deserialize)]
 pub struct AuthorityProviderArgs {
     //** The transaction requiring a signature. */
     transaction: AnyType,
     //** Pubkeys associated with the privkey held by the `SignatureProvider` */
-    available_keys: Vec<String>
+    available_keys: Vec<String>,
 }
 #[derive(Serialize, Deserialize)]
 pub struct SignatureProviderArgs {
     chain_id: String,
-    required_keys: Vec<String>,
+    pub required_keys: Vec<String>,
     serialized_tx: Vec<u8>,
     serialized_ctx_free_data: Option<Vec<u8>>,
-    abis: Vec<Abi>
+    abis: Vec<Abi>,
+}
+
+pub struct ResourcePayer {
+    payer: String,
+    max_net_bytes: u32,
+    max_cpu_us: u32,
+    max_mem_byes: u32,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -152,8 +154,6 @@ pub struct AbiProvider;
 #[derive(Serialize, Deserialize)]
 pub struct AuthorityProvider;
 
-
-
 // Enums
 
 #[derive(Default, Debug, Serialize, Deserialize, Clone)]
@@ -162,8 +162,6 @@ pub enum AnyType {
     // it is only meant to be a place holder until I figure out how to
     // best represent the `Any` type from TS' behavior in Rust, best practices considered.
     Some,
-    None,
-    #[serde(other)]
     #[default]
-    Other,
+    None,
 }

@@ -1,9 +1,9 @@
 use flate2::{Compress, Decompress};
 use std::collections::HashMap;
-use std::hash::Hash;
 use crate::eos_api::api_types::{
     Api,
     AbiProvider,
+    SignatureProviderArgs,
     // ActionSerializerType,
     AuthorityProviderArgs,
     AuthorityProvider,
@@ -64,3 +64,8 @@ impl AbiProvider {
     }
 }
 
+impl SignatureProvider {
+    pub fn get_available_keys(args: SignatureProviderArgs) -> Option<Vec<String>> {
+        return Some(args.required_keys)
+    }
+}
