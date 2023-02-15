@@ -1,6 +1,6 @@
 #[allow(dead_code)]
+use crate::eos_api::api_types::{TransactResult};
 use serde::{Deserialize, Serialize};
-// use eosio::{TransactionTrace};
 
 pub struct NCCreateDao {
     author: String,
@@ -181,91 +181,6 @@ struct ActionReceipt {
     abi_sequence: u32,
 }
 
-#[derive(Default, Debug, Serialize, Deserialize, Clone)]
-pub struct Authorization {
-    actor: String,
-    permission: String,
-}
-
-#[derive(Default, Debug, Serialize, Deserialize, Clone)]
-pub struct ProcessedAction {
-    account: String,
-    name: String,
-    authorization: Vec<Authorization>,
-    data: Option<AnyType>,
-    hex_data: String,
-}
-
-#[derive(Default, Debug, Serialize, Deserialize, Clone)]
-pub enum AnyType {
-    // This is probably a code smell, or a bad idea, either way,
-    // it is only meant to be a place holder until I figure out how to
-    // best represent the `Any` type from TS' behavior in Rust, best practices considered.
-    Some,
-    None,
-    #[serde(other)]
-    #[default]
-    Other,
-}
-
-#[derive(Default, Debug, Serialize, Deserialize, Clone)]
-pub struct ActionTrace {
-    action_ordinal: u32,
-    creator_action_ordinal: u32,
-    closest_unnotified_ancestor_action_ordinal: u32,
-    receipt: ActionReceipt,
-    receiver: String,
-    act: ProcessedAction,
-    context_free: bool,
-    elapsed: u32,
-    console: String,
-    trx_id: String,
-    block_num: u32,
-    block_time: String,
-    producer_block_id: Option<String>,
-    account_ram_deltas: Vec<AccountDelta>,
-    account_disk_deltas: Vec<AccountDelta>,
-    except: Option<AnyType>,
-    error_code: Option<u32>,
-    return_value: Option<AnyType>,
-    return_value_hex_data: String,
-    return_value_data: Option<AnyType>,
-    inline_traces: Vec<ActionTrace>,
-}
-#[derive(Default, Debug, Serialize, Deserialize, Clone)]
-pub struct AccountDelta {
-    account: String,
-    delta: u32,
-}
-
-#[derive(Default, Debug, Serialize, Deserialize, Clone)]
-pub struct TransactionReceiptHeader {
-    status: String,
-    cpu_usage_us: usize,
-    net_usage_words: usize,
-}
-
-#[derive(Default, Debug, Serialize, Deserialize, Clone)]
-pub struct TransactionTrace {
-    id: String,
-    block_num: usize,
-    block_time: String,
-    producer_block_id: Option<String>,
-    receipt: Option<TransactionReceiptHeader>,
-    elapsed: u32,
-    net_usage: u32,
-    scheduled: bool,
-    action_traces: Vec<ActionTrace>,
-    account_ram_data: Option<AccountDelta>,
-    except: Option<String>,
-    error_code: Option<u32>, // Rewrite this as custom error type i.e Type Error = std::result::Result<T, ErrorType>
-    bill_to_accounts: Vec<String>,
-}
-
-pub struct TransactResult {
-    transaction_id: String,
-    processed: TransactionTrace,
-}
 
 pub struct GetTableRowsPayload {
     pub json: bool,
@@ -319,3 +234,123 @@ pub struct DAOPayload {
     owner: String,
     description_sha_256: String
 }
+
+
+// struct AbiType {
+//     new_type_name: String,
+//     new_type: String
+// }
+
+// struct  AbiStruct {
+//     name: String,
+//     struct_name: String,
+//     base: String,
+//     fields: Vec<AbiStructFields>
+// }
+
+// struct AbiStructFields {
+//     name: String,
+//     field_type: String,
+// }
+
+// struct AbiActions {
+//     name: String,
+//     abi_action_type: String,
+//     ricardian_contract: String,
+// }
+
+// struct AbiTable {
+//     table_name: String,
+//     table_type: String,
+//     index_type: String,
+//     key_names: Vec<String>,
+//     key_types: Vec<String>
+// }
+
+// struct RicardianClauses {
+//     clause_id: String,
+//     body: String,
+// }
+
+// struct ErrorMessages {
+//     error_code: i32,
+//     error_msg: String,
+// }
+
+// struct AbiExtension {
+//     tag: i32,
+//     value: String,
+// }
+
+// struct AbiVariantData {
+//     variant_name: String,
+//     variant_types: Vec<String>,
+// }
+// enum AbiVariant {
+//     Some(Vec<AbiVariantData>),
+//     None
+// }
+
+// struct ActionResultData {
+//     result_name: String,
+//     result_type: String,
+// }
+
+// enum ActionResult {
+//     Some(Vec<ActionResultData>),
+//     None
+// }
+// struct KvSecondaryIndices {
+//     index_type: String
+// }
+// struct KvPrimaryIndex {
+//     name: String,
+//     pi_type: String,
+// }
+// struct KvTableData {
+//     kvt_type: String,
+//     primary_index: KvPrimaryIndex,
+//     secondary_indices: Vec<KvSecondaryIndices>
+
+// }
+
+// enum KvTable {
+//     Some(Vec<KvTableData>)
+// }
+// struct ABI {
+//     version: String,
+//     types: Vec<AbiType>,
+//     structs: Vec<AbiStruct>,
+//     actions: Vec<AbiActions>,
+//     tables: Vec<AbiTable>,
+//     ricardian_clauses: Vec<RicardianClauses>,
+//     error_messages: Vec<ErrorMessages>,
+//     abi_extensions: Vec<AbiExtension>,
+//     variants: Option<AbiVariant>,
+//     action_results: Option<ActionResult>,
+//     kv_tables: Option<KvTable>
+
+
+// }
+
+// struct Header(i32, String);
+// struct ProducerScheduleType {
+//     version: i32,
+//     producers: Vec<ProducerAuthority>
+// }
+// struct BlockHeader {
+//     timestamp: String,
+//     producer: String,
+//     confirmed: i32,
+//     previous: String,
+//     tx_mroot: String,
+//     action_mroot: String,
+//     schedule_version: i32,
+//     new_producers: Option<ProducerScheduleType>,
+//     header_extensions: Vec<Header>
+// }
+
+// struct Authorization {
+//     actor: String,
+//     permission: String,
+// }

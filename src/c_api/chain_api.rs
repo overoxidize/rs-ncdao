@@ -1,19 +1,15 @@
 extern crate reqwest;
 extern crate serde;
 use crate::types::{
-    GetTableRowsPayload, ProposalPayload, SlicePayload, TopPoolPayload, TransactResult,
+    GetTableRowsPayload, ProposalPayload, SlicePayload, TopPoolPayload,
     VotePayload, WhiteListPayload,
 };
-use crate::io_sys::{NCInitServices, NCInitUrlsDev, NCInit};
+use crate::eos_api::api_types::TransactResult;
+use crate::io_sys::io::{NCInitServices, NCInitUrlsDev, NCInit};
 use futures::executor::block_on;
 use reqwest::{get, Response};
 use serde::{Deserialize, Serialize};
 use std::any::Any;
-use std::future::Future;
-use std::pin::Pin;
-use std::sync::{Arc, Mutex};
-use std::task::{Context, Poll, Waker};
-use std::{thread, time::Duration};
 type Error = reqwest::Error;
 
 #[derive(Default, Clone, Serialize, Debug, Deserialize)]
@@ -37,6 +33,7 @@ pub struct ChainApi {
 
 
 pub async fn get_table_rows_with_payload(payload: GetTableRowsPayload) -> Response {
+
     let init_url = NCInitUrlsDev::default().nodeos_url.clone();
 
 

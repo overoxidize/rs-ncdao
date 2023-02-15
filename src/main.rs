@@ -4,18 +4,20 @@
 mod io_sys;
 mod types;
 mod ncdao;
-mod chain_api;
+mod c_api;
 mod submit;
-mod rpc;
+mod json_rpc;
+mod eos_api;
+
 use reqwest::Response;
-
-// TODO: pull in types from eos rust libraries
-
-use chain_api::{ChainApi, AnyType, get_table_rows, get_table_rows_with_payload};
+use crate::c_api::chain_api::{
+    ChainApi, 
+    AnyType, 
+    get_table_rows, 
+    get_table_rows_with_payload};
 use futures::Future;
-use io_sys::{NCInit, NCInitServices, NCInitUrlsDev};
+use io_sys::io::{NCInit, NCInitServices, NCInitUrlsDev};
 use types::GetTableRowsPayload;
-
 use reqwest::Error;
 
 #[tokio::main]

@@ -1,13 +1,12 @@
-use crate::io_sys::{NCInit, NCInitServices, NCInitUrlsDev};
+use crate::io_sys::io::{NCInit, NCInitServices, NCInitUrlsDev};
 use crate::types::{ NCCreateDao, NCGetDaoWhiteList, 
     NCCreateDaoProposal, NCCreateDaoUserWhitelistProposal, NCCreateDaoStakeProposal,
     NCApproveDaoProposal, NCExecuteDaoProposal, NCGetVotes, ActionGenerator,
-    NCGetDaoProposals, NCDaoProposalVote, NCDaoWithdrawVoteDeposit, NCReturnTxs, TransactResult,
+    NCGetDaoProposals, NCDaoProposalVote, NCDaoWithdrawVoteDeposit, NCReturnTxs,
     GetTableRowsPayload, DAOPayload, ProposalPayload, TopPoolPayload, SlicePayload, VotePayload,
-
     RewardPayload, WhiteListPayload};
 
-use crate::chain_api::{ChainApi};
+use crate::c_api::chain_api::{ChainApi};
 
 struct NCDaosAPI {
     debug: bool,
@@ -17,3 +16,4 @@ struct NCDaosAPI {
     dao_ag: ActionGenerator,
     // submitter: NCSubmitApi
 }
+
