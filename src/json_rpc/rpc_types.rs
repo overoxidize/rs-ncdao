@@ -1,3 +1,4 @@
+use crate::eos_api::api_types::{Authorization};
 pub struct Abi {
     version: String,
     types: Vec<AbiType>,
@@ -103,4 +104,18 @@ pub struct JsonRpc {
     pub endpoint: JsonRpcEndpoint,
     pub input: String,
     pub init: String,
+}
+
+pub struct PushTransactionArgs {
+    signatures: Vec<String>,
+    compression: i32,
+    serialized_transaction: Vec<u8>,
+    serialized_ctx_free_data: Vec<u8>
+
+}
+
+pub struct ProcessedAction {
+    account: String,
+    name: String,
+    authorization: Vec<Authorization>
 }

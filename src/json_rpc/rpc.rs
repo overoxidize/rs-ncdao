@@ -1,4 +1,4 @@
-use crate::submit::AuthorityProviderArgs;
+use crate::eos_api::api_types::AuthorityProviderArgs;
 use crate::eos_api::api_types::{BinaryAbi};
 use crate::json_rpc::rpc_types::{JsonRpcEndpoint, JsonRpc};
 
@@ -36,16 +36,6 @@ impl JsonRpc {
         JsonRpc { endpoint, input, init }
     }
 
-    pub fn get_required_keys(args: AuthorityProviderArgs) -> Option<Vec<String>> {
-        unimplemented!()
-    }
-
-    pub fn get_raw_abi(account_name: String) -> Option<BinaryAbi> {
-        let raw_abi = reqwest::get(account_name);
-
-        
-        unimplemented!()
-    }
 }
 
 

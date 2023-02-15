@@ -1,5 +1,4 @@
 use serde::{Serialize, Deserialize};
-
 #[derive(Default, Debug, Serialize, Deserialize, Clone)]
 pub enum AnyType {
     // This is probably a code smell, or a bad idea, either way,
@@ -104,4 +103,25 @@ pub struct BinaryAbi {
     account_name: String,
     abi: Vec<u8>,
 
+}
+
+pub struct AuthorityProviderArgs {
+    transaction: AnyType,
+    available_keys: Vec<String>
+}
+
+pub struct AbiProvider;
+
+impl AbiProvider {
+    pub fn get_required_keys(args: AuthorityProviderArgs) -> Option<Vec<String>> {
+        unimplemented!()
+    }
+
+
+    pub fn get_raw_abi(account_name: String) -> Option<BinaryAbi> {
+        let raw_abi = reqwest::get(account_name);
+
+        
+        unimplemented!()
+    }
 }

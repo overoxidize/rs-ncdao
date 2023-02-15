@@ -9,16 +9,15 @@ mod submit;
 mod json_rpc;
 mod eos_api;
 
-use reqwest::Response;
+use reqwest::{Response, Error};
+
 use crate::c_api::chain_api::{
     ChainApi, 
     AnyType, 
     get_table_rows, 
     get_table_rows_with_payload};
-use futures::Future;
-use io_sys::io::{NCInit, NCInitServices, NCInitUrlsDev};
+use io_sys::io::{NCInit};
 use types::GetTableRowsPayload;
-use reqwest::Error;
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {

@@ -20,7 +20,7 @@ use crate::json_rpc::rpc_types::{
     Abi,
     // BlockTaposInfo,
     // GetInfoResult,
-    // PushTransactionArgs,
+    PushTransactionArgs,
     // GetBlockHeaderStateResult,
     // GetBlockInfoResult,
     // GetBlockResult,
