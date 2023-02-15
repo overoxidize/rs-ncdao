@@ -1,15 +1,30 @@
 use serde::{Serialize, Deserialize};
-#[derive(Default, Debug, Serialize, Deserialize, Clone)]
-pub enum AnyType {
-    // This is probably a code smell, or a bad idea, either way,
-    // it is only meant to be a place holder until I figure out how to
-    // best represent the `Any` type from TS' behavior in Rust, best practices considered.
-    Some,
-    None,
-    #[serde(other)]
-    #[default]
-    Other,
+use crate::json_rpc::rpc_types::{JsonRpc, Abi};
+use std::collections::HashMap;
+
+#[derive(Serialize, Deserialize)]
+pub struct Api {
+    pub rpc: JsonRpc, //
+    pub authority_provider: AuthorityProvider,
+    pub abi_provider: AbiProvider,
+    pub signature_provider: SignatureProvider,
+    pub chain_id: String,
+
+    // pub text_encoder: TextEncoder
+    // pub text_decoder: TextDecoder
+        //* The functionality of these objects may end up being supplied by flate2 */
+    
+    pub abi_types: HashMap<String, ()>,
+
+    pub transaction_types: HashMap<String, ()>,
+
+    pub contracts: HashMap<String, ()>, //
+
+    pub cached_abis: HashMap<String, CachedAbi>
+    
 }
+
+
 #[derive(Default, Debug, Serialize, Deserialize, Clone)]
 pub struct Authorization {
     actor: String,
@@ -100,28 +115,55 @@ pub struct TransactResult {
 }
 
 pub struct BinaryAbi {
+    //** The account deeploying the abi */ 
     account_name: String,
+    //** The abi in raw (binary) form */ 
     abi: Vec<u8>,
-
+    
 }
 
+#[derive(Serialize, Deserialize)]
+pub struct CachedAbi {
+    raw_abi: Vec<u8>,
+    abi: Abi
+}
+#[derive(Serialize, Deserialize)]
 pub struct AuthorityProviderArgs {
+    //** The transaction requiring a signature. */
     transaction: AnyType,
+    //** Pubkeys associated with the privkey held by the `SignatureProvider` */
     available_keys: Vec<String>
 }
+#[derive(Serialize, Deserialize)]
+pub struct SignatureProviderArgs {
+    chain_id: String,
+    required_keys: Vec<String>,
+    serialized_tx: Vec<u8>,
+    serialized_ctx_free_data: Option<Vec<u8>>,
+    abis: Vec<Abi>
+}
 
+#[derive(Serialize, Deserialize)]
+pub struct SignatureProvider;
+
+// Unit Structs
+#[derive(Serialize, Deserialize)]
 pub struct AbiProvider;
-
-impl AbiProvider {
-    pub fn get_required_keys(args: AuthorityProviderArgs) -> Option<Vec<String>> {
-        unimplemented!()
-    }
+#[derive(Serialize, Deserialize)]
+pub struct AuthorityProvider;
 
 
-    pub fn get_raw_abi(account_name: String) -> Option<BinaryAbi> {
-        let raw_abi = reqwest::get(account_name);
 
-        
-        unimplemented!()
-    }
+// Enums
+
+#[derive(Default, Debug, Serialize, Deserialize, Clone)]
+pub enum AnyType {
+    // This is probably a code smell, or a bad idea, either way,
+    // it is only meant to be a place holder until I figure out how to
+    // best represent the `Any` type from TS' behavior in Rust, best practices considered.
+    Some,
+    None,
+    #[serde(other)]
+    #[default]
+    Other,
 }

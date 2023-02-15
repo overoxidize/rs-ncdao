@@ -2,15 +2,17 @@ use flate2::{Compress, Decompress};
 use std::collections::HashMap;
 use std::hash::Hash;
 use crate::eos_api::api_types::{
-    // AbiProvider,
+    Api,
+    AbiProvider,
     // ActionSerializerType,
-    // AuthorityProvider,
+    AuthorityProviderArgs,
+    AuthorityProvider,
     BinaryAbi,
-    // CachedAbi,
+    CachedAbi,
     // ContextFreeGroupCallback,
     // Query,
     // QueryConfig,
-    // SignatureProvider,
+    SignatureProvider,
     // TransactConfig,
     // Transaction,
     TransactResult, 
@@ -25,47 +27,40 @@ use crate::json_rpc::rpc_types::{
     // GetBlockInfoResult,
     // GetBlockResult,
     // ReadOnlyTransactResult,
-    JsonRpc
+    JsonRpc, JsonRpcEndpoint
 };
-
-
-pub struct Api {
-    pub rpc: JsonRpc, //
-    // pub authority_provider: AuthorityProvider,
-    // pub abi_provider: AbiProvider
-    // pub signature_provider: SignatureProvider,
-    // pub chain_id: String,
-
-    // pub text_encoder: TextEncoder
-    // pub text_decoder: TextDecoder
-        //* The functionality of these objects may end up being supplied by flate2 */
-    
-    pub abi_types: HashMap<String, ()>,
-
-    pub transaction_types: HashMap<String, ()>,
-
-    pub contracts: HashMap<String, ()>, //
-
-    // pub cached_abis: HashMap<String, CachedAbi>
-    
-}
-
-
 impl Api {
     fn new() -> Api {
-        // let val;
-        // Api {
-        //     rpc: JsonRpc {endpoint: val, input: "".to_owned(), init: "".to_owned()} ,
-        //     authority_provider: AuthorityProvider,
-        //     abi_provider: AbiProvider,
-        //     chain_id: String,
+        let val: JsonRpcEndpoint = JsonRpcEndpoint("".to_owned());
+        Api {
+            rpc: JsonRpc {endpoint: val, input: "".to_owned(), init: "".to_owned()} ,
+            authority_provider: AuthorityProvider,
+            abi_provider: AbiProvider,
+            signature_provider: SignatureProvider,
+            chain_id: "".to_owned(),
         //     text_encoder: TextEncoder,
         //     text_decoder: TextDecoder,
-        //     abi_types: HashMap::new(),
-        //     transaction_types: HashMap::new(),
-        //     contracts: HashMap::new()
+            abi_types: HashMap::new(),
+            transaction_types: HashMap::new(),
+            contracts: HashMap::new(),
+            cached_abis: HashMap::new()
 
-        // };
+        };
         unimplemented!();
     }
 }
+
+impl AbiProvider {
+    pub fn get_required_keys(args: AuthorityProviderArgs) -> Option<Vec<String>> {
+        unimplemented!()
+    }
+
+
+    pub fn get_raw_abi(account_name: String) -> Option<BinaryAbi> {
+        let raw_abi = reqwest::get(account_name);
+
+        
+        unimplemented!()
+    }
+}
+
