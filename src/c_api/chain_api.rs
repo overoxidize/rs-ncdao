@@ -1,131 +1,157 @@
+extern crate dotenv;
 extern crate reqwest;
 extern crate serde;
+use crate::eos_api::api_types::{AnyType, TransactResult};
+use crate::io_sys::io::{NCInit, NCInitServices, NCInitUrlsDev};
 use crate::types::{
-    GetTableRowsPayload, ProposalPayload, SlicePayload, TopPoolPayload,
-    VotePayload, WhiteListPayload,
+    GetTableRowsPayload, ProposalPayload, SlicePayload, TopPoolPayload, VotePayload,
+    WhiteListPayload,
 };
-use crate::eos_api::api_types::TransactResult;
-use crate::io_sys::io::{NCInitServices, NCInitUrlsDev, NCInit};
-use futures::executor::block_on;
-use reqwest::{get, Response};
+use dotenv::dotenv;
+use reqwest::header::{self, HeaderValue, InvalidHeaderValue};
+use reqwest::{get, header::HeaderMap, Client, Request, Response};
 use serde::{Deserialize, Serialize};
-use std::any::Any;
+use std::env;
 type Error = reqwest::Error;
 
 #[derive(Default, Clone, Serialize, Debug, Deserialize)]
-pub enum AnyType {
-    Some,
-    None,
-    #[default]
-    Other,
-}
 
-#[derive(Default, Debug, Deserialize, Clone)]
 pub struct ChainApi {
     pub nodeos_url: String,
     pub contract: String,
     pub fetch: Option<AnyType>,
 }
 
-// TODO: Uses of .clone() and .into() are anti-patterns, and eventually, an Rc or Arc will be
+// TODO: *Some* uses of .clone() and .into() are anti-patterns, and eventually, an Rc or Arc will be
 // needed to provide trackable shared ownership of a piece of data.
 // https://rust-unofficial.github.io/patterns/anti_patterns/borrow_clone.html
 
-
-pub async fn get_table_rows_with_payload(payload: GetTableRowsPayload) -> Response {
-
-    let init_url = NCInitUrlsDev::default().nodeos_url.clone();
-
-
-    let url_val: String = String::from(init_url.clone() + "/v1/chain/get_table_rows");
-
-    let payload = GetTableRowsPayload {
-        json: true,
-        code: payload.code,
-        scope: payload.scope,
-        table: "proposals".into(),
-        table_key: payload.table_key,
-        lower_bound: payload.lower_bound.into(),
-        upper_bound: payload.upper_bound.into(),
-        key_type: "i64".into(),
-        index_position: "1".into(),
-        encode_type: "".into(),
-        limit: 0,
-        reverse: false,
-        show_payer: false,
-    };
-
-    let resp: Result<Response, reqwest::Error> = reqwest::get(url_val).await;
-
-    return resp.unwrap();
-}
-
 pub async fn get_table_rows() -> Response {
+    dotenv().ok();
+
     let init_url = NCInitUrlsDev::default().nodeos_url.clone();
 
+    let url_val: String = init_url.clone() + "/v1/chain/get_table_rows";
 
-    let url_val: String = String::from(init_url.clone() + "/v1/chain/get_table_rows");
+    let mut headers = HeaderMap::new();
 
-    let resp = get(String::from(url_val)).await;
+    fn header_value(val: String) -> Result<HeaderValue, InvalidHeaderValue> {
+        HeaderValue::from_str(&val)
+    }
 
-    let value = resp.unwrap();
-    value
+    let hv: fn(String) -> Result<HeaderValue, InvalidHeaderValue> = header_value;
+
+    headers.insert("username", hv(String::from("dx.io")).unwrap());
+
+    headers.insert("phone_number", hv(String::from("+420111111112")).unwrap());
+    headers.insert(
+        "verification_code",
+        hv(String::from(dotenv!("VERIFICATION_CODE"))).unwrap(),
+    );
+    headers.insert(
+        "private_key",
+        hv(String::from(dotenv!("PRIVATE_KEY"))).unwrap(),
+    );
+
+    let init_client = Client::builder().build().unwrap();
+
+    let resp = init_client.get(url_val).headers(headers).send().await;
+
+    resp.unwrap()
 }
 
-pub async fn get_proposal_by_id(opts: ProposalPayload) -> Response {
-    let proposal_payload = ProposalPayload {
-        id: opts.id,
-        contract: opts.contract,
-    };
+pub async fn get_table_rows_with_payload(opts: GetTableRowsPayload) -> Response {
+    dotenv().ok();
 
-    let payload = GetTableRowsPayload {
-        json: true,
-        code: proposal_payload.contract.clone(),
-        scope: proposal_payload.contract.clone(),
-        table: "slice".into(),
-        table_key: proposal_payload.id.clone(),
-        lower_bound: proposal_payload.id.clone(),
-        upper_bound: proposal_payload.id.into(),
-        key_type: "i64".into(),
-        index_position: "1".into(),
-        encode_type: "".into(),
-        limit: 0,
-        reverse: false,
-        show_payer: false,
-    };
-    let resp = get_table_rows_with_payload(payload).await;
+    let init_url = NCInitUrlsDev::default().nodeos_url.clone();
 
-    resp
+    let url_val: String = init_url.clone() + "/v1/chain/get_table_rows";
+
+    let mut headers = HeaderMap::new();
+
+    fn header_value(val: String) -> Result<HeaderValue, InvalidHeaderValue> {
+        HeaderValue::from_str(&val)
+    }
+
+    let hv: fn(String) -> Result<HeaderValue, InvalidHeaderValue> = header_value;
+
+    headers.insert("username", hv(String::from("dx.io")).unwrap());
+
+    headers.insert("phone_number", hv(String::from("+420111111112")).unwrap());
+    headers.insert(
+        "verification_code",
+        hv(String::from(dotenv!("VERIFICATION_CODE"))).unwrap(),
+    );
+    headers.insert(
+        "private_key",
+        hv(String::from(dotenv!("PRIVATE_KEY"))).unwrap(),
+    );
+
+    let init_client = Client::builder().build().unwrap();
+
+    let resp = init_client.get(url_val).headers(headers).send().await;
+
+    resp.unwrap()
 }
 
-async fn get_proposal_by_contract(opts: ProposalPayload) -> Result<Response, Error> {
-    let payload = ProposalPayload {
-        id: opts.id,
-        contract: opts.contract,
-    };
+pub async fn get_proposal_by_id(opts: GetTableRowsPayload) -> Response {
+    dotenv().ok();
 
+    let init_url = NCInitUrlsDev::default().nodeos_url.clone();
 
-    let gtr_payload = GetTableRowsPayload {
-        json: true,
-        code: payload.contract.clone(),
-        scope: payload.contract.clone(),
-        table: "proposals".into(),
-        table_key: payload.contract.clone(),
-        lower_bound: payload.contract.clone(),
-        upper_bound: payload.contract.clone(),
-        key_type: "i64".into(),
-        index_position: "1".into(),
-        encode_type: "".into(),
-        limit: 0,
-        reverse: false,
-        show_payer: false,
-    };
-    
+    let url_val: String = init_url.clone() + "/v1/chain/get_table_rows";
 
-    let resp = get_table_rows_with_payload(gtr_payload).await;
+    let mut headers = HeaderMap::new();
 
-    Ok(resp)
+    fn header_value(val: String) -> Result<HeaderValue, InvalidHeaderValue> {
+        HeaderValue::from_str(&val)
+    }
+
+    let hv: fn(String) -> Result<HeaderValue, InvalidHeaderValue> = header_value;
+
+    headers.insert("username", hv(String::from("dx.io")).unwrap());
+
+    headers.insert("phone_number", hv(String::from("+420111111112")).unwrap());
+    headers.insert(
+        "verification_code",
+        hv(String::from(dotenv!("VERIFICATION_CODE"))).unwrap(),
+    );
+    headers.insert(
+        "private_key",
+        hv(String::from(dotenv!("PRIVATE_KEY"))).unwrap(),
+    );
+
+    let init_client = Client::builder().build().unwrap();
+
+    get_table_rows_with_payload(opts).await
 }
+
+// async fn get_proposal_by_contract(opts: ProposalPayload) -> Result<Response, Error> {
+//     let payload = ProposalPayload {
+//         id: opts.id,
+//         contract: opts.contract,
+//     };
+
+//     let gtr_payload = GetTableRowsPayload {
+//         json: true,
+//         code: payload.contract.clone(),
+//         scope: payload.contract.clone(),
+//         table: "proposals".into(),
+//         table_key: payload.contract.clone(),
+//         lower_bound: payload.contract.clone(),
+//         upper_bound: payload.contract.clone(),
+//         key_type: "i64".into(),
+//         index_position: "1".into(),
+//         encode_type: "".into(),
+//         limit: 0,
+//         reverse: false,
+//         show_payer: false,
+//     };
+
+//     // let resp = get_table_rows_with_payload(gtr_payload).await;
+//     unimplemented!()
+//     Ok(resp)
+// }
 
 // pub async fn get_slice(opts: SlicePayload) -> Response {
 
@@ -165,8 +191,6 @@ impl ChainApi {
             fetch,
         }
     }
-
-
 
     //   pub async fn get_slice(self, opts: SlicePayload<'_>) -> Response {
 

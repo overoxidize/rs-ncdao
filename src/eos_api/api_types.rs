@@ -1,6 +1,6 @@
 use crate::json_rpc::rpc_types::{Abi, JsonRpc};
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
+use std::{collections::HashMap, any::Any};
 
 #[derive(Serialize, Deserialize)]
 pub struct Api {
@@ -144,11 +144,71 @@ pub struct ResourcePayer {
     max_cpu_us: u32,
     max_mem_byes: u32,
 }
+pub struct Transaction {
+    expiration: String,
+    ref_block_num: u32,
+    ref_block_prefix: u32,
+    max_net_usage_words: u32,
+    max_cpu_usage_ms: u32,
+    delay_sec: u32,
+    context_free_actions: Vec<Action>,
+    context_free_data: Vec<u8>,
+    actions: Vec<Action>,
+    transaction_extensions: Vec<HashMap<u32, String>>,
+    resource_payer: ResourcePayer,
+}
+pub struct TransactConfig {
+    broadcast: bool,
+    sign: bool,
+    read_only: bool,
+    return_fail_trace: bool,
+    required_keys: Vec<String>,
+    compression: bool,
+    blocks_behind: u32,
+    use_last_irreversible: bool,
+    expire_seconds: u64,
 
+}
+
+struct Action {
+    account: String,
+    name: String,
+    authorization: Vec<Authorization>,
+    data: Option<AnyType>,
+    hex_data: String,
+}
+
+pub struct ActionSerializerType {
+    action_name: String,
+}
+
+struct SerializedAction {
+    account: String,
+    name: String,
+    authorization: Vec<Authorization>,
+    data: String,
+}
+
+pub struct QueryConfig {
+    sign: bool,
+    required_keys: Vec<String>,
+    authorization: Vec<Authorization>
+}
+
+pub enum Query{
+    Method(String),
+    MethodFilter(String, String),
+    MethodArgFilter(String, String, String),
+    MethodExplicitForm {
+        method: String,
+        arg: Option<AnyType>,
+        filter: Option<Vec<Self>>
+    }
+}
+// Unit Structs
 #[derive(Serialize, Deserialize)]
 pub struct SignatureProvider;
 
-// Unit Structs
 #[derive(Serialize, Deserialize)]
 pub struct AbiProvider;
 #[derive(Serialize, Deserialize)]
@@ -165,3 +225,18 @@ pub enum AnyType {
     #[default]
     None,
 }
+
+
+pub struct ContextFreeGroupCallback {
+    action: SerializedAction,
+    ctx_free_action: SerializedAction,
+    ctx_free_data: Vec<u8>
+}
+
+// impl ContextFreeGroupCallback {
+
+//     fn cb(cfa: u32, cfd: u32) -> ContextFreeGroupCallback {
+//         (cfa.len(), cfd.len())
+//     }
+//     // let cb:
+// }
