@@ -20,13 +20,15 @@ The entire api functionality is exposed via the `main.rs` file.
     cargo test
 
 
-## Get Dao Proposal by Id:
+## Get Table Rows/With Payload:
 
 ```rust
-    let url_val = NCInitUrlsDev::default().nodeos_url.clone();
     let gtr_response: Response = get_table_rows().await;
-    let data = gtr_response.json().await?;
+    let data_1 = gtr_response.text().await?;
 
+    let gtr_wp_response = get_table_rows_with_payload(payload).await;
+
+    let data_2 = gtr_wp_response.text().await;
 ```
 
 

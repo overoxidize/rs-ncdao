@@ -23,8 +23,8 @@ async fn main() -> Result<(), Error> {
 
         
     let proposal_payload = ProposalPayload {
-        id: "".to_string(),
-        contract: "".to_string(),
+        id: "1".to_string(),
+        contract: "daos2.nco".to_string(),
     };
 
     let payload = GetTableRowsPayload {
@@ -44,6 +44,7 @@ async fn main() -> Result<(), Error> {
     };
     let gtr_response: Response = get_table_rows().await;
     let data_1 = gtr_response.text().await?;
+
     let gtr_wp_response = get_table_rows_with_payload(payload).await;
 
     let data_2 = gtr_wp_response.text().await;
