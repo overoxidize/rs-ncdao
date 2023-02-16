@@ -1,4 +1,3 @@
-#[allow(dead_code)]
 use crate::eos_api::api_types::TransactResult;
 use eosio::ProducerAuthority;
 use serde::{Deserialize, Serialize};
