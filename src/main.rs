@@ -13,7 +13,7 @@ mod types;
 
 use reqwest::{Error, Response, Client};
 
-use crate::c_api::chain_api::{get_table_rows, ChainApi, get_table_rows_with_payload};
+use crate::c_api::chain_api::{get_table_rows, ChainApi, get_table_rows_with_payload, get_proposal_by_id};
 use crate::eos_api::api_types::AnyType;
 use io_sys::io::NCInit;
 use types::{GetTableRowsPayload, ProposalPayload};
@@ -42,16 +42,17 @@ async fn main() -> Result<(), Error> {
         reverse: false,
         show_payer: false,
     };
-    let gtr_response: Response = get_table_rows().await;
-    let data_1 = gtr_response.text().await?;
+    let gtr_response = get_table_rows().await;
+    let data_1 = gtr_response?.text().await?;
 
-    let gtr_wp_response = get_table_rows_with_payload(payload).await;
+    let gtr_wp_response = get_proposal_by_id(&payload).await;
 
-    let data_2 = gtr_wp_response.text().await;
-    // let gtr_wp: Response = get_table_rows_with_payload(payload).await;
+    // let data_2 = gtr_wp_response.unwrap_err();
+    let gtr_wp: Response = get_table_rows_with_payload(&payload).await.unwrap();
 
-    println!("{:?}", data_1);
-    println!("{:?}", data_2);
+    println!("Content 1: {:?} \n", data_1);
+    // println!("Content 2: {:?}", data_2);
 
     Ok(())
+
 }

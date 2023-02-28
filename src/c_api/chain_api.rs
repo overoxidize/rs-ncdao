@@ -26,12 +26,12 @@ pub struct ChainApi {
 // needed to provide trackable shared ownership of a piece of data.
 // https://rust-unofficial.github.io/patterns/anti_patterns/borrow_clone.html
 
-pub async fn get_table_rows() -> Response {
+pub async fn get_table_rows() -> Result<Response, Error> {
     dotenv().ok();
 
     let init_url = NCInitUrlsDev::default().nodeos_url.clone();
-
-    let url_val: String = init_url.clone() + "/v1/chain/get_table_rows";
+    let init_proxy_url = NCInitUrlsDev::default().nodeos_url.clone();
+    let url_val: String = init_url.clone() + "v1/tx/newcoin";
 
     let mut headers = HeaderMap::new();
 
@@ -57,15 +57,15 @@ pub async fn get_table_rows() -> Response {
 
     let resp = init_client.get(url_val).headers(headers).send().await;
 
-    resp.unwrap()
+    resp
 }
 
-pub async fn get_table_rows_with_payload(opts: GetTableRowsPayload) -> Response {
+pub async fn get_table_rows_with_payload(opts: &GetTableRowsPayload) -> Result<Response, Error> {
     dotenv().ok();
 
     let init_url = NCInitUrlsDev::default().nodeos_url.clone();
 
-    let url_val: String = init_url.clone() + "/v1/chain/get_table_rows";
+    let url_val: String = init_url.clone() + "v1/tx/newcoin";
 
     let mut headers = HeaderMap::new();
 
@@ -89,17 +89,16 @@ pub async fn get_table_rows_with_payload(opts: GetTableRowsPayload) -> Response 
 
     let init_client = Client::builder().build().unwrap();
 
-    let resp = init_client.get(url_val).headers(headers).send().await;
+    init_client.get(url_val).headers(headers).send().await
 
-    resp.unwrap()
 }
 
-pub async fn get_proposal_by_id(opts: GetTableRowsPayload) -> Response {
+pub async fn get_proposal_by_id(opts: &GetTableRowsPayload) -> Result<Response, Error> {
     dotenv().ok();
 
-    let init_url = NCInitUrlsDev::default().nodeos_url.clone();
+    let init_url = NCInitUrlsDev::default().nodeos_proxy_url.clone();
 
-    let url_val: String = init_url.clone() + "/v1/chain/get_table_rows";
+    let url_val: String = init_url.clone() + "v1/tx/newcoin";
 
     let mut headers = HeaderMap::new();
 
@@ -117,14 +116,19 @@ pub async fn get_proposal_by_id(opts: GetTableRowsPayload) -> Response {
         hv(String::from(dotenv!("VERIFICATION_CODE"))).unwrap(),
     );
     headers.insert(
-        "private_key",
-        hv(String::from(dotenv!("PRIVATE_KEY"))).unwrap(),
+        "Authorization",
+        hv("newsafe".to_owned() + &String::from(dotenv!("PRIVATE_KEY"))).unwrap(),
     );
 
     let init_client = Client::builder().build().unwrap();
 
     get_table_rows_with_payload(opts).await
 }
+
+// pub async fn get_proposal_by_contract(opts: ProposalPayload) -> Result<Response, Error> {
+
+
+// }
 
 // async fn get_proposal_by_contract(opts: ProposalPayload) -> Result<Response, Error> {
 //     let payload = ProposalPayload {
